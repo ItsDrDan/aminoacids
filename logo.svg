@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Peptide Party logo: two amino acid beads joined by a peptide bond, with a water drop">
+<circle cx="48" cy="48" r="46" fill="#fff6ec" stroke="#f0d2b0" stroke-width="3"/>
+<path d="M36 56h24" stroke="#2d3f4b" stroke-width="4" stroke-linecap="round"/>
+<circle cx="28" cy="56" r="15" fill="#ffd8b8" stroke="#e8973a" stroke-width="2.5"/>
+<circle cx="68" cy="56" r="15" fill="#c9ecdf" stroke="#4fa38a" stroke-width="2.5"/>
+<circle cx="24" cy="54" r="2" fill="#22313b"/><circle cx="32" cy="54" r="2" fill="#22313b"/><path d="M24 60q4 4 8 0" fill="none" stroke="#22313b" stroke-width="1.8" stroke-linecap="round"/>
+<circle cx="64" cy="54" r="2" fill="#22313b"/><circle cx="72" cy="54" r="2" fill="#22313b"/><path d="M64 60q4 4 8 0" fill="none" stroke="#22313b" stroke-width="1.8" stroke-linecap="round"/>
+<path d="M48 14c-5 7-7 11-7 14a7 7 0 0 0 14 0c0-3-2-7-7-14z" fill="#bfe3fa" stroke="#4a9fd6" stroke-width="2"/>
+</svg>
