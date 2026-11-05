@@ -810,7 +810,7 @@ Mol.prototype.svg=function(o){o=o||{};const N=this.n,S=INK;let minx=1e9,miny=1e9
   const hitR=ns.length?`<rect class="hitbox" x="${(gx0-4).toFixed(1)}" y="${(gy0-4).toFixed(1)}" width="${(gx1-gx0+8).toFixed(1)}" height="${(gy1-gy0+8).toFixed(1)}" rx="12"/>`:'';
   body+=`<g class="grp${(o.hits||[]).includes(g)?' hit':''}${(o.sel||[]).includes(g)?' picked':''}" data-g="${g}">${hitR}${groups[g].join('')}</g>`}
  const sc=o.scale||1;
- return `<svg class="mol" viewBox="${minx.toFixed(1)} ${miny.toFixed(1)} ${W.toFixed(1)} ${H.toFixed(1)}" width="${(W*sc).toFixed(0)}" height="${(H*sc).toFixed(0)}" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Helvetica,Arial,sans-serif" role="img"${o.label?` aria-label="${esc(o.label)}"`:''}>${this.over.join('')}${body}</svg>`};
+ return `<svg class="mol" viewBox="${minx.toFixed(1)} ${miny.toFixed(1)} ${W.toFixed(1)} ${H.toFixed(1)}" width="${(W*sc).toFixed(0)}" height="${(H*sc).toFixed(0)}" xmlns="http://www.w3.org/2000/svg" font-family="Inter,Helvetica,Arial,sans-serif" role="img" aria-label="${esc(o.label||'Structure diagram')}">${this.over.join('')}${body}</svg>`};
 
 /* ring helpers */
 function polyRing(cx,cy,r,n,rot){const v=[];for(let k=0;k<n;k++){const a=(rot+360/n*k)*Math.PI/180;v.push([cx+r*Math.cos(a),cy+r*Math.sin(a)])}return v}
