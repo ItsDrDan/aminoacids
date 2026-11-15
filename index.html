@@ -888,6 +888,34 @@ function chainMol(seq,o){o=o||{};const m=new Mol(),form=o.form||'zwit',links=o.l
 function chainSVG(seq,o){o=o||{};return chainMol(seq,o).svg(o)}
 function aaSVG(k,form,o){return chainSVG([k],Object.assign({form:form||'zwit'},o||{}))}
 
+
+/*A11Y-START*/
+/* Screen-reader descriptions for amino acid and peptide drawings (2026-11-14). The label lists what is drawn (end groups for
+   the chosen form, each side chain as it is drawn, visible residue tags) and never the amino acid's name unless it is
+   printed on the drawing. Same side-chain rules as drawR(). Tested by tools/check-a11y.js. */
+function a11ySide(k, form) {
+  const A = AA[k], sf = form === 'zwit' ? 'phys' : (form === 'neutral' || form === 'unch') ? 'n' : form;
+  let rows = A.R; if (rows === 'pro') return 'a ring: the side chain bonds back to the backbone N';
+  if ((sf === 'n' || sf === 'acid') && A.Rn && (k === 'Asp' || k === 'Glu')) rows = A.Rn;
+  if ((sf === 'n' || sf === 'base') && A.Rn && (k === 'Lys' || k === 'Arg')) rows = A.Rn;
+  const RING = { benz: 'a benzene ring', phenol: 'a benzene ring with an –OH', indole: 'two fused rings with an N–H', imid: 'a five-membered ring with two N atoms' };
+  const parts = rows.map(r => typeof r === 'string' ? r : r.ring ? RING[r.ring] || 'a ring' : r.dO ? r.t + '(=O)' : r.dN ? r.t + '(=' + r.dN + ')' : r.t + (r.R ? '(' + r.R + ')' : ''));
+  const ring = rows.findIndex(r => r && r.ring);
+  if (ring > 0) return '–' + parts.slice(0, ring).join('–') + '– attached to ' + parts.slice(ring).join(' ');
+  return '–' + parts.join('–');
+}
+function a11yChain(seq, o) {
+  o = o || {}; const form = o.form || 'zwit', links = o.links || seq.map(() => true);
+  const nT = form === 'neutral' ? '–NH2' : (form === 'base' || form === 'unch') ? 'H2N–' : 'H3N+–', cT = (form === 'neutral' || form === 'acid' || form === 'unch') ? '–COOH' : '–COO−';
+  const tag = (k, i) => o.tags ? ' (labeled ' + (typeof o.tags === 'function' ? o.tags(k, i) : k) + ')' : '';
+  if (seq.length === 1) return `Amino acid drawn with ${nT} and ${cT} on the alpha carbon, which also has an H. Side chain: ${a11ySide(seq[0], form)}${tag(seq[0], 0)}.`;
+  const groups = []; seq.forEach((k, i) => { if (i === 0 || !links[i - 1]) groups.push([]); groups[groups.length - 1].push(i); });
+  const sc = idx => idx.map(i => `${i + 1}) ${a11ySide(seq[i], form)}${tag(seq[i], i)}`).join('; ');
+  if (groups.length === 1) return `Peptide of ${seq.length} amino acids joined by peptide (amide) bonds, drawn from the ${nT.replace('–', '')} end on the left to the ${cT.replace('–', '')} end on the right. Side chains from left to right: ${sc(groups[0])}.`;
+  return `${seq.length} amino acids drawn left to right; ${groups.map(g => g.length > 1 ? 'amino acids ' + (g[0] + 1) + ' to ' + (g[g.length - 1] + 1) + ' are joined' : 'amino acid ' + (g[0] + 1) + ' is separate').join(', ')}. Side chains: ${sc(seq.map((k, i) => i))}.`;
+}
+(function () { const _c = chainSVG; chainSVG = function (seq, o) { o = o || {}; if (o.label) return _c(seq, o); let L = ''; try { L = a11yChain(seq, o); } catch (e) {} return _c(seq, L ? Object.assign({}, o, { label: L }) : o); }; })();
+/*A11Y-END*/
 /* ===== Question helpers ===== */
 const P=t=>`<p class="prompt">${t}</p>`;
 const box=t=>`<div class="struct">${t}</div>`;
